@@ -1,6 +1,9 @@
 package example.com.coolweather.util;
 
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
+
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -9,6 +12,7 @@ import org.json.JSONObject;
 import example.com.coolweather.db.City;
 import example.com.coolweather.db.County;
 import example.com.coolweather.db.Province;
+import example.com.coolweather.gson.Weather;
 
 /**
  * Created by didi on 2017/4/5.
@@ -74,4 +78,16 @@ public class Utility {
         return false;
     }
 
+    @Nullable
+    public static Weather hanlderWeatherResponse(String response) {
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
+            String weatherContent = jsonArray.getJSONObject(0).toString();
+            return new Gson().fromJson(weatherContent, Weather.class);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
